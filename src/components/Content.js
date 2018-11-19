@@ -17,7 +17,7 @@ class Content extends ConnectedComponent {
 
     createSelectTabElement() {
         const selectTabElement = document.createElement('h2');
-        selectTabElement.innerHTML = 'Please, select any Tab to display <b style="color: #491253">20 random articles</b> of choosen category';
+        selectTabElement.innerHTML = 'Please, select any Tab to display <b style="color: #491253">20 random articles</b> of chosen category';
         
         return selectTabElement;
     }
