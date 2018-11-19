@@ -1,10 +1,10 @@
 class ConnectedComponent extends Component {
     constructor(element, props) {
         super(element, props);
-        
+
         let mappings = {};
         
-        this.subscribe = store.subscribe(() => {
+        this.unSubscribe = store.subscribe(() => {
             const newMappings = this.mapStateToProps(store.getState());
 
             const isEqual = helper.swallowCompare(newMappings, mappings);
@@ -28,6 +28,6 @@ class ConnectedComponent extends Component {
     }
 
     detachFromStore() {
-        this.subscribe();
+        this.unSubscribe();
     }
 }

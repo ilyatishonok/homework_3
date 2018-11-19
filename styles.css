@@ -1,21 +1,38 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
 body {
-    margin: 0;
+    min-height: 100%;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: center;
+    font-family: fantasy;
 }
 
 .layout {
-    height: 100%;
+    height: auto;
     width: 100%;
 }
 
 .tabs {
-    width: 100%;
-    display: inline-flex;
     position: fixed;
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 .tab {
     cursor: pointer;
-    width: 100%;
+    width: 25%;
     background: black;
     color: white;
     font-family: fantasy;
@@ -32,11 +49,15 @@ body {
 }
 
 .content {
-    height: 100%;
+    margin-left: 200px;
+    margin-right: 200px;
+    padding-top: 54px;
+    box-shadow: 0 0 20px black;
+    min-height: 400px;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    transition: all ease .2s;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
 }
 
 .articles {
@@ -47,13 +68,13 @@ body {
 }
 
 .article {
-    height: 200px;
-    width: 25%;
+    width: 100%;
+    color: white;
     cursor: pointer;
-}
-
-.article:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-decoration: none;
 }
 
 .tab:hover {
@@ -90,7 +111,48 @@ body {
     }
   }
 
-  .image {
-      width: 100%;
-      height: 80%;
-  }
+.image {
+    width: 100%;
+    height: 100%;
+}
+
+.article-content {
+    background-color: rgba(0, 0, 0, 0.7);
+    min-height: 200px;
+    padding: 30px;
+    transition: all ease .2s;
+}
+
+.article-content:hover {
+    background-color: rgba(0,0,0,0.5);
+}
+
+@media(max-width: 1020px) {
+    .content {
+        margin-left: 100px;
+        margin-right: 100px;
+    }
+}
+
+@media(max-width: 750px) {
+    .content {
+        margin-left: 50px;
+        margin-right: 50px;
+        padding-top: 108px;
+    }
+
+    .tab {
+        width: 50%;
+    }
+}
+
+@media(max-width: 520px) {
+    .content {
+        margin: 0px;
+        padding-top: 216px;
+    }
+
+    .tab {
+        width: 100%;
+    }
+}

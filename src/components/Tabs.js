@@ -1,14 +1,19 @@
-class Tabs extends Component{
+class Tabs extends Component {
     constructor(element, props) {
         super(element, props);
         
         this.onElementClick = this.onElementClick.bind(this);
         this.currentTab = null;
-        this.categories = ['People', 'Techno', 'Music', 'Auto'];
     }
 
     onElementClick() {
         const { target } = event;
+        const { apiKey, source } = this.props;
+        const { 
+            createChangeTabActionSuccess,
+            createChangeTabActionFailure,
+            startChangeTabAction 
+        } = contentActions;
 
         if (target.classList.contains('tab')) {
             if (this.currentTab !== target) {
@@ -20,17 +25,17 @@ class Tabs extends Component{
 
                 this.currentTab.classList.add('selected');
 
-                store.dispatch({
-                    type: 'START_CHANGE_TAB_ACTION',
-                    payload: target.textContent,
-                });
+                store.dispatch(startChangeTabAction(target.textContent));
 
-                fetch(`https://newsapi.org/v2/everything?page=1&q=${target.textContent}&apiKey=e3f4198bcce84c8ba6d01cda68933d4f`).then(data => data.json())
+                const page = Math.floor(Math.random() * 50);
+
+                fetch(`${source}?apiKey=${apiKey}&q=${target.textContent}`)
+                    .then(res => res.json())
                     .then(data => {
-                        store.dispatch({
-                            type: 'CHANGE_TAB_ACTION_SUCCESS',
-                            payload: data.articles,
-                        })
+                        store.dispatch(createChangeTabActionSuccess(data.articles));
+                    })
+                    .catch(err => {
+                        store.dispatch(createChangeTabActionFailure(err));
                     });
             } 
             
@@ -38,12 +43,14 @@ class Tabs extends Component{
     }
 
     render() {
-        this.categories.forEach(categorie => {
-            const categorieElement = document.createElement('div');
-            categorieElement.classList.add('tab');
-            categorieElement.textContent = categorie;
+        const { categories } = this.props;
 
-            this.element.appendChild(categorieElement);
+        categories.forEach(category => {
+            const categoryElement = document.createElement('div');
+            categoryElement.classList.add('tab');
+            categoryElement.textContent = category;
+
+            this.element.appendChild(categoryElement);
         });
 
         this.element.addEventListener('click', this.onElementClick);

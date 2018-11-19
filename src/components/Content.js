@@ -1,11 +1,7 @@
 class Content extends ConnectedComponent {
-    constructor(element, props) {
-        super(element, props);
-    }
-
     mapStateToProps(state) {
         return {
-            isLoading: state.content.loading,
+            isLoading: state.content.isLoading,
             articles: state.content.articles,
             error: state.content.error,
             tab: state.content.tab,
@@ -40,27 +36,23 @@ class Content extends ConnectedComponent {
 
         if (articles && articles.length) {
             articles.forEach(article => {
-                const articleElement = document.createElement('div');
+                const articleElement = document.createElement('a');
+                const articleContentElement = document.createElement('div');
+                const articleTitle = document.createElement('h1');
+                articleTitle.textContent = article.title;
+                articleContentElement.classList.add('article-content');
+                articleElement.setAttribute('href', article.url);
                 articleElement.classList.add('article');
-                const articleImageLink = document.createElement('a');
-                const articleImage = document.createElement('img');
-                articleImage.classList.add('image');
-                articleImage.setAttribute('src', `${article.urlToImage}`);
-                articleImageLink.appendChild(articleImage);
-                const articleBody = document.createElement('div');
-                const articleMeta = document.createElement('div');
-                const articleAuthourElement = document.createElement('div');
-                articleAuthourElement.textContent = 'asdfasdf';
-                const articleDateElement = document.createElement('div');
-                articleDateElement.textContent = '12 March asdf';
-                articleMeta.appendChild(articleAuthourElement);
-                articleMeta.appendChild(articleDateElement);
-                const articleTitle = document.createElement('div');
-                articleBody.appendChild(articleMeta);
-                articleBody.appendChild(articleTitle);
-                articleTitle.textContent = `${article.title}`;
-                articleElement.appendChild(articleImageLink);
-                articleElement.appendChild(articleBody);
+                articleElement.style.background = `url(${article.urlToImage})`;
+                articleElement.style.backgroundSize = 'cover';
+                articleElement.style.backgroundPosition = 'center';
+                articleContentElement.appendChild(articleTitle);
+                articleTitle.style.margin = '0px';
+                const articleDescription = document.createElement('div');
+                articleDescription.textContent = article.description;
+                articleContentElement.appendChild(articleDescription);
+                articleElement.appendChild(articleContentElement);
+        
                 this.element.appendChild(articleElement)
             });
         }
