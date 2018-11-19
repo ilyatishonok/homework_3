@@ -4,6 +4,7 @@ class Tabs extends Component {
         
         this.onElementClick = this.onElementClick.bind(this);
         this.currentTab = null;
+        this.element.addEventListener('click', this.onElementClick);
     }
 
     onElementClick() {
@@ -27,15 +28,21 @@ class Tabs extends Component {
 
                 store.dispatch(startChangeTabAction(target.textContent));
 
-                const page = Math.floor(Math.random() * 50);
+                const page = Math.floor((Math.random() * 50) + 1);
 
-                fetch(`${source}?apiKey=${apiKey}&q=${target.textContent}`)
-                    .then(res => res.json())
+                fetch(`${source}?page=${page}&apiKey=${apiKey}&q=${target.textContent}`)
+                    .then(res => {
+                        if (!res.ok) {
+                            store.dispatch(createChangeTabActionFailure(`Sorry, something was going wrong.`));
+                        }
+
+                        return res.json();
+                    })
                     .then(data => {
                         store.dispatch(createChangeTabActionSuccess(data.articles));
                     })
-                    .catch(err => {
-                        store.dispatch(createChangeTabActionFailure(err));
+                    .catch(() => {
+                        store.dispatch(createChangeTabActionFailure(`Sorry, something was going wrong.`));
                     });
             } 
             
@@ -52,7 +59,5 @@ class Tabs extends Component {
 
             this.element.appendChild(categoryElement);
         });
-
-        this.element.addEventListener('click', this.onElementClick);
     }
 }

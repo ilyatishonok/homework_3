@@ -1,7 +1,7 @@
 const createStore = (reducer) => {
     let state;
     let listeners = [];
-    
+
     const getState = () => state;
     
     const dispatch = action => {
@@ -9,11 +9,11 @@ const createStore = (reducer) => {
         listeners.forEach(listener => listener());
     };
 
-    const subscribe = listener => {
-        listeners.push(listener);
+    const subscribe = newListener => {
+        listeners.push(newListener);
 
         return () => {
-            listeners = listeners.filter(l => l !== listener);
+            listeners = listeners.filter(listener => listener !== newListener);
         }
     };
 

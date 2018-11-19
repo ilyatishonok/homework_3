@@ -8,52 +8,74 @@ class Content extends ConnectedComponent {
         }
     }
 
+    createLoadingElement() {
+        const loadingElement = document.createElement('div');
+        loadingElement.classList.add('spinner');
+
+        return loadingElement;
+    }
+
+    createSelectTabElement() {
+        const selectTabElement = document.createElement('h2');
+        selectTabElement.textContent = 'Please, select any Tab to display 20 random articles of choosen category';
+        
+        return selectTabElement;
+    }
+
+    createErrorElement(error) {
+        const errorElement = document.createElement('error');
+        errorElement.classList.add('error');
+        errorElement.textContent = error;
+            
+        return errorElement;
+    }
+
+    createArticleElement(article) {
+        const articleElement = document.createElement('a');
+        const articleContentElement = document.createElement('div');
+        const articleTitleElement = document.createElement('h1');
+        const articleDescriptionElement = document.createElement('div');
+
+        articleElement.setAttribute('href', article.url);
+
+        articleTitleElement.textContent = article.title;
+        articleDescriptionElement.textContent = article.description;
+
+        articleElement.classList.add('article');
+        articleContentElement.classList.add('article-content');
+        articleTitleElement.classList.add('article-title');
+        articleDescriptionElement.classList.add('article-description');
+
+        articleElement.style.backgroundImage = article.urlToImage ?
+            `url(${article.urlToImage})` :
+            `url(http://www.pinnacleeducations.in/wp-content/uploads/2017/05/no-image.jpg)`;
+        
+
+        articleContentElement.appendChild(articleTitleElement);
+        articleContentElement.appendChild(articleDescriptionElement);
+        articleElement.appendChild(articleContentElement);
+
+        return articleElement;
+    }
+
     render() {
         const { isLoading, articles, error, tab } = this.props;
 
-        while (this.element.firstChild) {
-            this.element.removeChild(this.element.firstChild);
-        }
-
         if (isLoading) {
-            const loading = document.createElement('div');
-            loading.classList.add('spinner');
-            return this.element.appendChild(loading);
+            return this.element.appendChild(this.createLoadingElement());
         }
 
         if (!tab) {
-            const noContentProvidedElement = document.createElement('div');
-            noContentProvidedElement.textContent = 'Please select any tab';
-
-            return this.element.appendChild(noContentProvidedElement);
+            return this.element.appendChild(this.createSelectTabElement());
         }
 
         if (error) {
-            const error = document.createElement('error');
-            error.classList.add('error');
-            return this.element.appendChild(error);   
+            return this.element.appendChild(this.createErrorElement(error));  
         }
 
         if (articles && articles.length) {
             articles.forEach(article => {
-                const articleElement = document.createElement('a');
-                const articleContentElement = document.createElement('div');
-                const articleTitle = document.createElement('h1');
-                articleTitle.textContent = article.title;
-                articleContentElement.classList.add('article-content');
-                articleElement.setAttribute('href', article.url);
-                articleElement.classList.add('article');
-                articleElement.style.background = `url(${article.urlToImage})`;
-                articleElement.style.backgroundSize = 'cover';
-                articleElement.style.backgroundPosition = 'center';
-                articleContentElement.appendChild(articleTitle);
-                articleTitle.style.margin = '0px';
-                const articleDescription = document.createElement('div');
-                articleDescription.textContent = article.description;
-                articleContentElement.appendChild(articleDescription);
-                articleElement.appendChild(articleContentElement);
-        
-                this.element.appendChild(articleElement)
+                this.element.appendChild(this.createArticleElement(article));
             });
         }
     }
