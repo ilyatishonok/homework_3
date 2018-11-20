@@ -9,7 +9,7 @@ class Tabs extends Component {
 
     onElementClick() {
         const { target } = event;
-        const { apiKey, source } = this.props;
+        const { apiKey, source, dispatch } = this.props;
         const { 
             createChangeTabActionSuccess,
             createChangeTabActionFailure,
@@ -26,26 +26,25 @@ class Tabs extends Component {
 
                 this.currentTab.classList.add('selected');
 
-                store.dispatch(startChangeTabAction(target.textContent));
+                dispatch(startChangeTabAction(target.textContent));
 
                 const page = Math.floor((Math.random() * 50) + 1);
 
                 fetch(`${source}?page=${page}&apiKey=${apiKey}&q=${target.textContent}`)
                     .then(res => {
                         if (!res.ok) {
-                            store.dispatch(createChangeTabActionFailure(`Sorry, something was going wrong.`));
+                            dispatch(createChangeTabActionFailure(`Sorry, something was going wrong.`));
                         }
 
                         return res.json();
                     })
                     .then(data => {
-                        store.dispatch(createChangeTabActionSuccess(data.articles));
+                        dispatch(createChangeTabActionSuccess(data.articles));
                     })
                     .catch(() => {
-                        store.dispatch(createChangeTabActionFailure(`Sorry, something was going wrong.`));
+                        dispatch(createChangeTabActionFailure(`Sorry, something was going wrong.`));
                     });
-            } 
-            
+            }    
         }
     }
 
